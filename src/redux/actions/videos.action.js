@@ -16,7 +16,7 @@ export const getPopularVideos = () => async (dispatch) => {
         part: "snippet, contentDetails,statistics",
         chart: "mostPopular",
         regionCode: "RU",
-        maxResults: 20, 
+        maxResults: 20,
         pagetoken: "",
       },
     });
@@ -26,6 +26,41 @@ export const getPopularVideos = () => async (dispatch) => {
       payload: {
         videos: data.items,
         nextPageToken: data.nextPageToken,
+        category: 'All'
+      },
+    });
+
+    console.log(data);
+  } catch (error) {
+    console.log(error.message);
+    dispatch({
+      type: HOME_VIDEOS_FAIL,
+      payload: error.message,
+    });
+  }
+};
+
+export const getVideosByCategory = (keyword) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: HOME_VIDEOS_REQUEST,
+    });
+    const { data } = await request("/search", {
+      params: {
+        part: "snippet",
+        maxResults: 20,
+        pagetoken: getState().homeVideos.nextPageToken,
+        q: keyword,
+        type: "video",
+      },
+    });
+
+    dispatch({
+      type: HOME_VIDEOS_SUCCESS,
+      payload: {
+        videos: data.items,
+        nextPageToken: data.nextPageToken,
+        category:keyword
       },
     });
 

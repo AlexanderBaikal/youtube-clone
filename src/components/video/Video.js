@@ -22,10 +22,13 @@ function Video({ video }) {
 
   const [views, setViews] = useState(null);
   const [duration, setDuration] = useState(null);
-  const [channelIcon, setChannelIcon] = useState(null)
+  const [channelIcon, setChannelIcon] = useState(null);
 
   const seconds = moment.duration(duration).asSeconds();
   const _duration = moment.utc(seconds * 1000).format("mm:ss");
+
+  const _videoId = id?.videoId || id;
+  
 
   useEffect(() => {
     const get_video_details = async () => {
@@ -34,14 +37,14 @@ function Video({ video }) {
       } = await request("/videos", {
         params: {
           part: "contentDetails,statistics",
-          id: id,
+          id: _videoId,
         },
       });
-      setDuration(items[0].contentDetails.duration)
-      setViews(items[0].statistics.viewCount)
+      setDuration(items[0].contentDetails.duration);
+      setViews(items[0].statistics.viewCount);
     };
     get_video_details();
-  }, [id]);
+  }, [_videoId]);
 
   useEffect(() => {
     const get_channel_icon = async () => {
@@ -53,7 +56,7 @@ function Video({ video }) {
           id: channelId,
         },
       });
-      setChannelIcon(items[0].snippet.thumbnails.default)
+      setChannelIcon(items[0].snippet.thumbnails.default);
     };
     get_channel_icon();
   }, [channelId]);
@@ -67,15 +70,13 @@ function Video({ video }) {
       <div className="video__title">{title}</div>
       <div className="video__details">
         <span>
-          <AiFillEye />{numeral(views).format("0.a")} •&nbsp; 
+          <AiFillEye />
+          {numeral(views).format("0.a")} •&nbsp;
         </span>
         <span>{moment(publishedAt).fromNow()}</span>
       </div>
       <div className="video__channel">
-        <img
-          src={channelIcon?.url}
-          alt=""
-        />
+        <img src={channelIcon?.url} alt="" />
         <p>{channelTitle}</p>
       </div>
     </div>
