@@ -6,18 +6,18 @@ import {
 
 import request from "../../api";
 
-export const getPopularVideos = () => async (dispatch) => {
+export const getPopularVideos = () => async (dispatch,getState) => {
   try {
     dispatch({
       type: HOME_VIDEOS_REQUEST,
     });
     const { data } = await request("/videos", {
       params: {
-        part: "snippet, contentDetails,statistics",
+        part: "snippet,contentDetails,statistics",
         chart: "mostPopular",
         regionCode: "RU",
         maxResults: 20,
-        pagetoken: "",
+        pageToken: getState().homeVideos.nextPageToken,
       },
     });
 
@@ -49,7 +49,7 @@ export const getVideosByCategory = (keyword) => async (dispatch, getState) => {
       params: {
         part: "snippet",
         maxResults: 20,
-        pagetoken: getState().homeVideos.nextPageToken,
+        pageToken: getState().homeVideos.nextPageToken,
         q: keyword,
         type: "video",
       },

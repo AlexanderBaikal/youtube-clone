@@ -10,6 +10,10 @@
   height: 10vh;
   width: 100%;
 
+  position: fixed;
+  top: 0;
+  z-index: 999;
+
   &__menu {
     display: none;
   }
@@ -55,7 +59,7 @@
   }
 
   &__icons {
-    font: 0.15;
+    flex: 0.15;
     display: flex;
     justify-content: space-around;
     align-items: center;
