@@ -9,6 +9,8 @@ import LoginScreen from "./screens/loginScreen/LoginScreen";
 import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import WatchScreen from "./screens/watchScreen/WatchScreen";
+import SearchScreen from "./screens/SearchScreen";
 
 const Layout = ({ children }) => {
   const [sidebar, toggleSidebar] = useState(false);
@@ -30,7 +32,7 @@ const Layout = ({ children }) => {
 function App() {
   const { accessToken, loading } = useSelector((state) => state.auth);
   const history = useHistory();
-  
+
   useEffect(() => {
     if (!loading && !accessToken) {
       history.push("/auth");
@@ -47,8 +49,16 @@ function App() {
       <Route path="/auth">
         <LoginScreen />;
       </Route>
-      <Route path="/search">
-        <h1>Search Results</h1>
+
+      <Route path="/watch/:id">
+        <Layout>
+          <WatchScreen />
+        </Layout>
+      </Route>
+      <Route path="/search/:query">
+        <Layout>
+          <SearchScreen />
+        </Layout>
       </Route>
       <Redirect to="/" />
     </Switch>

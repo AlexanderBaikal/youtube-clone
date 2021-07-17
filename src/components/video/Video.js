@@ -8,6 +8,8 @@ import request from "../../api";
 import moment from "moment";
 import numeral from "numeral";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import { useHistory } from "react-router-dom";
 
 function Video({ video }) {
   const {
@@ -30,7 +32,10 @@ function Video({ video }) {
 
   const _videoId = id?.videoId || id;
 
+const history = useHistory()
+
   useEffect(() => {
+    let cleanupFunction = false;
     const get_video_details = async () => {
       const {
         data: { items },
@@ -40,13 +45,14 @@ function Video({ video }) {
           id: _videoId,
         },
       });
-      setDuration(items[0].contentDetails.duration);
-      setViews(items[0].statistics.viewCount);
+      if (!cleanupFunction) setDuration(items[0].contentDetails.duration);
+      if (!cleanupFunction) setViews(items[0].statistics.viewCount);
     };
     get_video_details();
   }, [_videoId]);
 
   useEffect(() => {
+    let cleanupFunction = false;
     const get_channel_icon = async () => {
       const {
         data: { items },
@@ -56,16 +62,21 @@ function Video({ video }) {
           id: channelId,
         },
       });
-      setChannelIcon(items[0].snippet.thumbnails.default);
+      if (!cleanupFunction) setChannelIcon(items[0].snippet.thumbnails.default);
     };
     get_channel_icon();
   }, [channelId]);
 
+
+  const handleVideoClick = () => {
+    history.push(`/watch/${_videoId}`)
+  }
+
   return (
-    <div className="video">
+    <div className="video" onClick={handleVideoClick}>
       <div className="video__top">
         <LazyLoadImage src={medium.url} effect="blur" />
-        <span className="video__duration">{_duration}</span>
+        <span className="video__top__duration">{_duration}</span>
       </div>
       <div className="video__title">{title}</div>
       <div className="video__details">

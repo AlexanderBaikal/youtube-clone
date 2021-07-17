@@ -35,7 +35,9 @@ function CategoriesBar() {
     setActiveElement(value);
     if (value === "All") {
       dispatch(getPopularVideos);
-    } else dispatch(getVideosByCategory(value));
+    } else {
+      dispatch(getVideosByCategory(value));
+    }
   };
 
   return (

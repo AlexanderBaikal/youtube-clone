@@ -4,8 +4,23 @@ import "./_header.scss";
 import { FaBars } from "react-icons/fa";
 import { AiOutlineSearch } from "react-icons/ai";
 import { MdNotifications, MdApps } from "react-icons/md";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const Header = ({ handleToggleSidebar }) => {
+  const [input, setInput] = useState("");
+
+  const history = useHistory();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    history.push(`search/${input}`);
+  };
+
+  const user = useSelector((state) => state.auth?.user);
+
   return (
     <div className="border border-dark header">
       <FaBars
@@ -18,8 +33,12 @@ const Header = ({ handleToggleSidebar }) => {
         alt=""
         className="header__logo"
       />
-      <form>
-        <input placeholder="Search" type="text" />
+      <form onSubmit={handleSubmit}>
+        <input
+          placeholder="Search"
+          type="text"
+          onChange={(e) => setInput(e.target.value)}
+        />
         <button type="submit">
           <AiOutlineSearch size={22} />
         </button>
@@ -27,10 +46,7 @@ const Header = ({ handleToggleSidebar }) => {
       <div className="header__icons">
         <MdNotifications size={28} />
         <MdApps size={28} />
-        <img
-          src="http://pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png"
-          alt="avatar"
-        />
+        <img src={user?.photoURL} alt="avatar" />
       </div>
     </div>
   );
