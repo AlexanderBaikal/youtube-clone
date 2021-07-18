@@ -11,7 +11,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { useHistory } from "react-router-dom";
 
-function Video({ video }) {
+function Video({ video, channelScreen }) {
   const {
     id,
     snippet: {
@@ -21,6 +21,7 @@ function Video({ video }) {
       publishedAt,
       thumbnails: { medium },
     },
+    contentDetails,
   } = video;
 
   const [views, setViews] = useState(null);
@@ -30,9 +31,9 @@ function Video({ video }) {
   const seconds = moment.duration(duration).asSeconds();
   const _duration = moment.utc(seconds * 1000).format("mm:ss");
 
-  const _videoId = id?.videoId || id;
+  const _videoId = id?.videoId || contentDetails?.videoId || id;
 
-const history = useHistory()
+  const history = useHistory();
 
   useEffect(() => {
     let cleanupFunction = false;
@@ -45,8 +46,10 @@ const history = useHistory()
           id: _videoId,
         },
       });
-      if (!cleanupFunction) setDuration(items[0].contentDetails.duration);
-      if (!cleanupFunction) setViews(items[0].statistics.viewCount);
+      if (!cleanupFunction && items && items.length)
+        setDuration(items[0].contentDetails.duration);
+      if (!cleanupFunction && items && items.length)
+        setViews(items[0].statistics.viewCount);
     };
     get_video_details();
   }, [_videoId]);
@@ -62,15 +65,15 @@ const history = useHistory()
           id: channelId,
         },
       });
-      if (!cleanupFunction) setChannelIcon(items[0].snippet.thumbnails.default);
+      if (!cleanupFunction && items && items.length)
+        setChannelIcon(items[0].snippet.thumbnails.default);
     };
     get_channel_icon();
   }, [channelId]);
 
-
   const handleVideoClick = () => {
-    history.push(`/watch/${_videoId}`)
-  }
+    history.push(`/watch/${_videoId}`);
+  };
 
   return (
     <div className="video" onClick={handleVideoClick}>
@@ -86,10 +89,12 @@ const history = useHistory()
         </span>
         <span>{moment(publishedAt).fromNow()}</span>
       </div>
-      <div className="video__channel">
-        <LazyLoadImage src={channelIcon?.url} effect="blur" />
-        <p>{channelTitle}</p>
-      </div>
+      {!channelScreen && (
+        <div className="video__channel">
+          <LazyLoadImage src={channelIcon?.url} effect="blur" />
+          <p>{channelTitle}</p>
+        </div>
+      )}
     </div>
   );
 }

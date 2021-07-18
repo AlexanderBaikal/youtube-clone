@@ -16,7 +16,7 @@ const Header = ({ handleToggleSidebar }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    history.push(`search/${input}`);
+    history.push(`/search/${input}`);
   };
 
   const user = useSelector((state) => state.auth?.user);
