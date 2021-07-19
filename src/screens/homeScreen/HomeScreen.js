@@ -23,7 +23,7 @@ function HomeScreen() {
   );
 
   const fetchData = () => {
-    if (activeCategory == "All") {
+    if (activeCategory === "All") {
       dispatch(getPopularVideos());
     } else {
       dispatch(getVideosByCategory(activeCategory));

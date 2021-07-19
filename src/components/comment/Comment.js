@@ -6,6 +6,8 @@ const Comment = ({ comment }) => {
   const { authorDisplayName, authorProfileImageUrl, publishedAt, textDisplay } =
     comment;
 
+  
+
   return (
     <div className="comment p-2 d-flex">
       <img
