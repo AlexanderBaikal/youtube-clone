@@ -3,11 +3,11 @@ import "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD0we_kE81YrFBAc7cumPd9rgNDluhkBYk",
-  authDomain: "clone-c3282.firebaseapp.com",
+  authDomain: "clone-c3282.web.app",
   projectId: "clone-c3282",
   storageBucket: "clone-c3282.appspot.com",
   messagingSenderId: "180364641617",
-  appId: "1:180364641617:web:38e3aeae6c5923231dbf70",
+  appId: "1:180364641617:web:38e3aeae6c5923231dbf70"
 };
 
 firebase.initializeApp(firebaseConfig);
